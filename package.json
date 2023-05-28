@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "nodemon",
     "test": "jest",
-    "start": "nodemon app.js",
-    "swagger-autogen": "node swagger.js"
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -27,8 +26,6 @@
   },
   "devDependencies": {
     "eslint": "^8.40.0",
-    "jest": "28.1.0",
-    "swagger-autogen": "^2.23.1",
-    "swagger-ui-express": "^4.6.3"
+    "jest": "28.1.0"
   }
 }
