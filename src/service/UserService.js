@@ -46,7 +46,8 @@ class UserService {
         token : token,
         user_data: {
           id: user[0].id,
-          email: user[0].email          
+          email: user[0].email,
+          name: user[0].name,          
         }
       };
 
