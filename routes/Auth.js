@@ -14,15 +14,16 @@ router.post('/login', async (req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type, X-Custom-Header');
     
-    const {email, senha} = req.body;
+    const {email, password} = req.body;
+    console.log(req.body);
 
     if (!email) return res.status(422).json({msg: "O campo e-mail é obrigatório"});
-    if (!senha) return res.status(422).json({msg: "O campo senha é obrigatório"});
+    if (!password) return res.status(422).json({msg: "O campo senha é obrigatório"});
     
     const user = await User.findOne({email: email});
     if (!user) return res.status(404).json({msg: "Usuário não encontrado"});
     
-    const checkPass = await bcrypt.compare(senha, user.senha);
+    const checkPass = await bcrypt.compare(password, user.password);
     if (!checkPass) return res.status(422).json({msg: "Senha inválida"});
 
     try {

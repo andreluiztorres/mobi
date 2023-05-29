@@ -24,14 +24,13 @@ const User = require('../models/User')
 router.post('/save', async(req,res) => {
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type, X-Custom-Header');
-    const { nome, telefone, email, senha, confirma_senha } = req.body;
+    const { name, telephones, email, password, confirmPassword } = req.body
     
-    if (!nome) return res.status(422).json({msg: "O campo nome é obrigatório"});
-    if (!telefone) return res.status(422).json({msg: "O campo telefone é obrigatório"});
+    if (!name) return res.status(422).json({msg: "O campo nome é obrigatório"});
     if (!email) return res.status(422).json({msg: "O campo email é obrigatório"});
-    if (!senha) return res.status(422).json({msg: "O campo senha é obrigatório"});
-    if (!confirma_senha) return res.status(422).json({msg: "O campo confirma_senha é obrigatório"});
-    if (senha !== confirma_senha) return res.status(422).json({msg: "As senhas não conferem"});
+    if (!password) return res.status(422).json({msg: "O campo senha é obrigatório"});
+    if (!confirmPassword) return res.status(422).json({msg: "O campo confirmar senha é obrigatório"});
+    if (password !== confirmPassword) return res.status(422).json({msg: "As senhas não conferem"});
 
     const userExists = await User.findOne({email: email});
 
@@ -41,33 +40,26 @@ router.post('/save', async(req,res) => {
     const passwordHash = await bcrypt.hash(senha, salt)
 
     const user = new User({
-        nome,
-        telefone,        
+        name,
+        telephones,        
         email,
-        tipo: "cliente",
-        senha: passwordHash,
+        password: passwordHash,
     })
 
     try {
         await user.save()
-        res.status(201).json({msg: "Usuário criado com sucesso"})
+        res.status(201).json({
+            id: user._id,
+            created_at: new Date(),
+            modified_at: new Date(),
+
+        })
     } catch (error) {
         res.status(500).json({msg : error})
     }
 })
 
 // Buscar usuário por ID com validação de Token
-router.get("/user/:id", checkToken, async(req,res) => {
-    const id = req.params.id
-
-    const user = await User.findById(id, '-password')
-
-    if (!user) {
-        return res.status(404).json({msg: "Usuário não encontrado"})
-    }
-
-    res.status(200).json({user})
-})
 
 function checkToken(req, res, next) {
     const authHeader = req.header('authorization')

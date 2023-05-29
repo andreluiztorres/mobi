@@ -14,8 +14,10 @@ server.keepAliveTimeout = 65000;
 
 // Routes
 const Auth = require('./src/controller/AuthController');
+const User = require('./src/controller/UserController');
 
 app.use('/auth', Auth);
+app.use('/user', User);
 
 app.use(express.json())
 
